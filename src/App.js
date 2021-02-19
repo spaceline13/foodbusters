@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import Main from "./views/Main";
+import React from "react";
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            // Purple and green play nicely together.
+            main: '#b55d5d',
+        },
+        secondary: {
+            // This is green.A700 as hex.
+            main: '#fc8181',
+        },
+    },
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <ThemeProvider theme={theme}>
+          <Main />
+      </ThemeProvider>
   );
 }
 

@@ -9,11 +9,28 @@ import Results from "../components/Results";
 
 export default function Landing() {
     const [status, setStatus] = useState(INITIAL)
-    const handleAnalyze = () => {
+    const [result, setResult] = useState('')
+    const handleAnalyze = async (text) => {
         setStatus(LOADING)
-        setTimeout(() => {
-            setStatus(DONE)
-        }, 5000)
+        const res = await fetch('http://83.212.168.41:9200/snopes/_search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({  "query": {
+                "query_string": {
+                    "query": text,
+                    "default_field": "origin"
+                }
+            }})
+        })
+        const json = await res.json()
+        setResult(JSON.stringify(json))
+        setStatus(DONE)
+    }
+    const handleReset = () => {
+        setStatus(INITIAL)
     }
     return (
     <>
@@ -33,7 +50,7 @@ export default function Landing() {
               {status === LOADING ? (
                   <Loader />
               ) : status === DONE ? (
-                  <Results />
+                  <Results result={result} reset={handleReset}/>
               ) : (
                   <SearcContent onAnalyze={handleAnalyze}/>
               )}

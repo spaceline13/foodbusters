@@ -1,8 +1,9 @@
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
-import React from "react";
+import React, {useState} from "react";
 
 const SearcContent = ({onAnalyze}) => {
+    const [text, setText] = useState('')
     return (
         <div className="items-center flex flex-wrap">
             <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
@@ -18,10 +19,11 @@ const SearcContent = ({onAnalyze}) => {
                         multiline
                         style={{width:'100%'}}
                         rows={6}
+                        onChange={(event) => setText(event.target.value)}
                     />
                 </Paper>
                 <center>
-                    <div onClick={onAnalyze} className={'btn'}><i className="fas fa-desktop"></i> &nbsp; <b>ANALYZE</b> </div>
+                    <div onClick={()=>onAnalyze(text)} className={'btn'}><i className="fas fa-desktop"></i> &nbsp; <b>ANALYZE</b> </div>
                 </center>
             </div>
         </div>

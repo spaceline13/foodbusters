@@ -8,14 +8,12 @@ const Results = ({result, reset}) => {
                 <table>
                     <thead>
                         <tr>
-                            <td style={{width: '15%'}}>index</td>
-                            <th style={{width: '15%'}}>score</th>
-                            <th style={{width: '15%'}}>title</th>
-                            <th style={{width: '15%'}}>abstract</th>
-                            <th style={{width: '15%'}}>conclusion</th>
-                            <th style={{width: '15%'}}>strong</th>
-                            <th style={{width: '15%'}}>medium</th>
-                            <th style={{width: '15%'}}>low</th>
+                            <th>score</th>
+                            <th>title</th>
+                            <th>abstract</th>
+                            <th>conclusion</th>
+                            <th>verdict</th>
+                            <th>url</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,14 +23,24 @@ const Results = ({result, reset}) => {
                             const index = hit._index
                             return (
                                 <tr>
-                                    <td>{index}</td>
-                                    <td>{score}</td>
-                                    <td><div style={{height: '150px', overflow: 'auto'}}>{item.title}</div></td>
-                                    <td><div style={{height: '150px', overflow: 'auto'}}>{item.abstract}</div></td>
-                                    <td><div style={{height: '150px', overflow: 'auto'}}>{item.conclusions}</div></td>
-                                    <td><div style={{height: '150px', overflow: 'auto'}}>{item.strong_score}</div></td>
-                                    <td><div style={{height: '150px', overflow: 'auto'}}>{item.medium_score}</div></td>
-                                    <td><div style={{height: '150px', overflow: 'auto'}}>{item.low_score}</div></td>
+                                    <td>{Math.round(score)}</td>
+                                    <td><div style={{height: '150px', overflow: 'auto', maxWidth: '300px'}}>{item.title}</div></td>
+                                    <td><div style={{height: '150px', overflow: 'auto', maxWidth: '300px'}}>{item.abstract}</div></td>
+                                    <td><div style={{height: '150px', overflow: 'auto', maxWidth: '300px'}}>
+                                        <b>{item.concluded_part}</b>
+                                        {item.conclusions}
+                                    </div></td>
+                                    <td>
+                                        <div style={{height: '150px', overflow: 'auto'}}>
+                                            <div><b>strong:</b> {item.strong_score}</div>
+                                            <div><b>medium:</b> {item.medium_score}</div>
+                                            <div><b>low:</b> {item.low_score}</div>
+                                            <div><b>final:</b> {item.final_score}</div>
+                                            <div><b>verdict:</b> {item.verdict}</div>
+                                            {item.sentiment && item.sentiment.probability && <div><b>S</b>:n:{item.sentiment.probability.neg.toFixed(2)} p:{item.sentiment.probability.pos.toFixed(2)} nt:{item.sentiment.probability.neutral.toFixed(2)}</div>}
+                                        </div>
+                                    </td>
+                                    <td><div style={{height: '150px', overflow: 'auto'}}><a href={item.url}>click here</a></div></td>
                                 </tr>
                             )
                         })}

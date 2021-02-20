@@ -22,7 +22,7 @@ export default function Landing() {
                 "query": {
                     "multi_match": {
                         "query": text,
-                        "fields": ["title.english_stemmed^2", "abstract.english_stemmed^2", "conclusion"]
+                        "fields": ["conclusion.english_stemmed^2", "abstract.english_stemmed^2", "title.english_stemmed"]
                     }
                 }
             })

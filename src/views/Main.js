@@ -9,24 +9,26 @@ import Results from "../components/Results";
 
 export default function Landing() {
     const [status, setStatus] = useState(INITIAL)
-    const [result, setResult] = useState('')
+    const [result, setResult] = useState()
     const handleAnalyze = async (text) => {
         setStatus(LOADING)
-        const res = await fetch('http://83.212.168.41:9200/snopes/_search', {
+        const res = await fetch('http://83.212.168.41:9200/efsa/_search', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({  "query": {
-                "query_string": {
-                    "query": text,
-                    "default_field": "origin"
+            body: JSON.stringify({
+                "query": {
+                    "multi_match": {
+                        "query": text,
+                        "fields": ["title.english_stemmed^2", "abstract.english_stemmed^2", "conclusion"]
+                    }
                 }
-            }})
+            })
         })
         const json = await res.json()
-        setResult(JSON.stringify(json))
+        setResult(json)
         setStatus(DONE)
     }
     const handleReset = () => {

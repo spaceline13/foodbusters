@@ -6,29 +6,38 @@ import SearcContent from "../components/SearchContent";
 import {DONE, INITIAL, LOADING} from "../utils/consts";
 import Loader from '../components/Loader'
 import Results from "../components/Results";
+import FinalResults from "../components/FinalResults";
 
 export default function Landing() {
     const [status, setStatus] = useState(INITIAL)
     const [result, setResult] = useState()
     const handleAnalyze = async (text) => {
         setStatus(LOADING)
-        const res = await fetch(`${process.env.REACT_APP_ELASTIC_URL}/efsa/_search`, {
+        const resElasticSearch = await fetch(`${process.env.REACT_APP_SERVER_URL}/search`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
-                "query": {
-                    "multi_match": {
-                        "query": text,
-                        "fields": ["concluded_part.english_stemmed^4", "conclusion.english_stemmed^2", "abstract.english_stemmed^2", "title.english_stemmed"]
-                    }
-                }
+                text
             })
         })
-        const json = await res.json()
-        setResult(json)
+        const jsonElasticSearch = await resElasticSearch.json()
+
+        const resClassification = await fetch(`${process.env.REACT_APP_SERVER_URL}/classify`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                text
+            })
+        })
+        const jsonClassification = await resClassification.json()
+
+        setResult({ text, jsonElasticSearch, jsonClassification })
         setStatus(DONE)
     }
     const handleReset = () => {

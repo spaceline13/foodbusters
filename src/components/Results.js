@@ -1,10 +1,38 @@
 import Paper from "@material-ui/core/Paper";
 import React from "react";
+import FinalResults from "./FinalResults";
 
 const Results = ({result, reset}) => {
+    const { jsonElasticSearch, jsonClassification } = result
     return (
         <Paper elevation={3} style={{background: 'rgb(255,255,255,0.9)', padding: '20px', margin: '30px'}}>
-            {result && result.hits &&
+            {jsonClassification &&
+                <table>
+                    <thead>
+                        <tr>
+                            <th>True</th>
+                            <th>Mostly true</th>
+                            <th>Mixture</th>
+                            <th>False</th>
+                            <th>is_negation</th>
+                            <th>sentiment</th>
+                            <th>sentiment_prob</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{jsonClassification['True']} &nbsp; </td>
+                            <td>{jsonClassification['Mostly True']} &nbsp; </td>
+                            <td>{jsonClassification['Mostly False']} &nbsp; </td>
+                            <td>{jsonClassification['False']} &nbsp; </td>
+                            <td>{jsonClassification['is_negation']} &nbsp; </td>
+                            <td>{jsonClassification['sentiment']} &nbsp; </td>
+                            <td>{jsonClassification['sentiment_prob']} &nbsp; </td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+            {jsonElasticSearch && jsonElasticSearch.hits &&
                 <table>
                     <thead>
                         <tr>
@@ -17,7 +45,7 @@ const Results = ({result, reset}) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {result.hits.hits.map(hit => {
+                        {jsonElasticSearch.hits.hits.map(hit => {
                             const item = hit._source
                             const score = hit._score
                             const index = hit._index
@@ -38,6 +66,7 @@ const Results = ({result, reset}) => {
                                             <div><b>final:</b> {item.final_score}</div>
                                             <div><b>verdict:</b> {item.verdict}</div>
                                             {item.sentiment && item.sentiment.probability && <div><b>S</b>:n:{item.sentiment.probability.neg.toFixed(2)} p:{item.sentiment.probability.pos.toFixed(2)} nt:{item.sentiment.probability.neutral.toFixed(2)}</div>}
+                                            <div><b>negation:</b> {item.is_negation}</div>
                                         </div>
                                     </td>
                                     <td><div style={{height: '150px', overflow: 'auto'}}><a href={item.url}>click here</a></div></td>
@@ -51,6 +80,8 @@ const Results = ({result, reset}) => {
             <center>
                 <div onClick={reset} className={'btn'}><b>TEST ANOTHER TEXT</b> </div>
             </center>
+
+            {/*{result && <FinalResults result={result} />}*/}
         </Paper>
     )
 }

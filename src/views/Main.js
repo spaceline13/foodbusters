@@ -12,7 +12,7 @@ export default function Landing() {
     const [result, setResult] = useState()
     const handleAnalyze = async (text) => {
         setStatus(LOADING)
-        const res = await fetch('http://83.212.168.41:9200/efsa/_search', {
+        const res = await fetch(`${process.env.REACT_APP_ELASTIC_URL}/efsa/_search`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export default function Landing() {
                 "query": {
                     "multi_match": {
                         "query": text,
-                        "fields": ["conclusion.english_stemmed^2", "abstract.english_stemmed^2", "title.english_stemmed"]
+                        "fields": ["concluded_part.english_stemmed^4", "conclusion.english_stemmed^2", "abstract.english_stemmed^2", "title.english_stemmed"]
                     }
                 }
             })

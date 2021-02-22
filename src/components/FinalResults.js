@@ -1,5 +1,4 @@
 import GaugeChart from 'react-gauge-chart'
-import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from 'recharts'
 import React from "react";
 import Blockquote from "./Blockquote";
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
@@ -15,36 +14,37 @@ const ResultText = styled.div`
     letter-spacing: 5px;
     text-shadow: 1px 2px 12px rgb(0 0 0 / 50%), 0px -4px 10px rgb(255 255 255 / 30%);
 `
+const score_to_text = score => {
+    if (score > 0.6) {
+        return "False"
+    } else if (score > 0.4) {
+        return "Mixture"
+    } else if (score > 0.2) {
+        return "Mostly True"
+    } else {
+        return "True"
+    }
+}
 const FinalResults = ({result}) => {
     const { text, jsonElasticSearch, jsonClassification } = result
     return (
         <div>
-            <center>
+            <center style={{marginTop: '30px'}}>
                 <Blockquote>{text}</Blockquote>
-                <ResultText>True</ResultText>
+                <ResultText>{score_to_text(jsonElasticSearch.result.false_certainty)}</ResultText>
                 <div style={{maxWidth: '500px'}}>
                     <GaugeChart id="gauge-chart2"
                                 nrOfLevels={4}
-                                percent={0.86}
+                                percent={jsonElasticSearch.result.false_certainty}
                                 colors={["#68d391", "#fc8181"]}
                     />
                 </div>
                 <hr style={{marginTop: '20px'}}/>
-                Based on EFSA Datasets: Mostly True
+                Credibility Score based on EFSA Datasets: {score_to_text(jsonElasticSearch.result.false_certainty)} ({jsonElasticSearch.result.false_certainty.toFixed(2)})
                 <br />
-                Based on Snopes Machine Learning: Mostly False
+                Credibility Score estimated using classifier trained with Snope's datasets: {score_to_text(jsonClassification.False)} ({jsonClassification.False})
                 <hr style={{marginBottom: '50px'}}/>
-                <BarChart width={730} height={250} data={[{ name: 'a', value: [0, 12] }, { name: 'b', value: [0, 6] }]}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="value" fill="#63b3ed" />
-                </BarChart>
-                <hr style={{marginTop: '50px'}}/>
-                <Button><DescriptionOutlinedIcon /> See original doc</Button>
-                <hr style={{marginTop: '50px', marginBottom: '50px'}}/>
-                Highlighted text here
+
             </center>
         </div>
     )

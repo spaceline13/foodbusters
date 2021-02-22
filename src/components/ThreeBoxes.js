@@ -13,7 +13,7 @@ const ThreeBoxes = () => {
                                 </div>
                                 <h6 className="text-xl font-semibold">1. Enter your text</h6>
                                 <p className="mt-2 mb-4 text-gray-600">
-                                    Copy and paste the text that you want to classify to the text filed above and click ANALYZE to start the process
+                                    Write (or copy and paste) the claim that you want to test in the text field and click ANALYZE to start the identification process
                                 </p>
                             </div>
                         </div>
@@ -26,10 +26,10 @@ const ThreeBoxes = () => {
                                     <i className="fas fa-hourglass-start"></i>
                                 </div>
                                 <h6 className="text-xl font-semibold">
-                                    2. Wait for the platform calculations
+                                    2. Wait for the platform to process your request
                                 </h6>
                                 <p className="mt-2 mb-4 text-gray-600">
-                                    The platform is going to analyze your text and classify it according to the 4 categories mentioned bellow: 1: one, 2: two, 3: three, 4: four
+                                    The platform is going to analyze your text and test it against tens of thousands of classified papers from trusted sources (EFSA) identifying if the claim is true or false
                                 </p>
                             </div>
                         </div>
@@ -45,7 +45,7 @@ const ThreeBoxes = () => {
                                     3. Read and download the results
                                 </h6>
                                 <p className="mt-2 mb-4 text-gray-600">
-                                    The results are displayed on your screen, you can now download them using the download button at the top right corner of the screen
+                                    The results will be displayed on your screen. The claim you entered will be categorized to one of the four categories following according to it's score: False, Mixture, Mostly True and True.
                                 </p>
                             </div>
                         </div>
